@@ -1,13 +1,22 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useTodos } from "../context/todoContext";
 
-const TodoForm = () => {
-  const { addTodo } = useTodos();
+const TodoForm = ({ todoDetail }) => {
+  const { addTodo, updateTodo } = useTodos();
 
   const [todo, setTodo] = useState({
     title: "",
     description: "",
   });
+
+  const [mode, setMode] = useState("new");
+
+  useEffect(() => {
+    if (todoDetail) {
+      setTodo(todoDetail);
+      setMode("update");
+    }
+  }, [todoDetail]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -18,7 +27,12 @@ const TodoForm = () => {
     e.preventDefault();
     if (!todo.title.trim()) return;
     if (!todo.description.trim()) return;
-    addTodo(todo);
+    if (mode === "new") {
+      addTodo(todo);
+    } else {
+      updateTodo(todo);
+      setMode("new");
+    }
     setTodo({ title: "", description: "" });
   };
 
@@ -29,7 +43,7 @@ const TodoForm = () => {
         className="bg-white p-8 rounded-lg shadow-lg w-96"
       >
         <h2 className="text-2xl font-semibold text-gray-700 text-center mb-6">
-          Add New Todo
+          {mode == "new" ? "Add New Todo" : "Edit Todo"}
         </h2>
 
         <div className="mb-4">
@@ -46,6 +60,7 @@ const TodoForm = () => {
             placeholder="Enter title..."
             value={todo.title}
             onChange={handleInputChange}
+            required
           />
         </div>
 
@@ -62,6 +77,7 @@ const TodoForm = () => {
             placeholder="Enter description..."
             value={todo.description}
             onChange={handleInputChange}
+            required
           />
         </div>
 
@@ -69,7 +85,7 @@ const TodoForm = () => {
           type="submit"
           className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition duration-200"
         >
-          Add Todo
+          Save
         </button>
       </form>
     </div>
