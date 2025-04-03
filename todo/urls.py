@@ -4,10 +4,10 @@ from rest_framework.routers import DefaultRouter
 
 
 router = DefaultRouter()
-router.register(r'todos', TodoViewSet)
+router.register(r'', TodoViewSet)
 
 urlpatterns = [
     path("", include(router.urls)),
-    path("todos/<int:todo_id>/toggle-status",
+    path("<int:todo_id>/toggle-status",
          toggle_todo_status, name="toggle_status")
 ]
