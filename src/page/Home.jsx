@@ -2,8 +2,10 @@ import { useTodos } from "../context/todoContext";
 import { MdDeleteForever } from "react-icons/md";
 import { MdEditSquare } from "react-icons/md";
 import TodoForm from "../components/TodoForm";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { formatDate } from "../utils/formatTime";
+import { getTodos } from "../api/todo";
+import Navbar from "../components/Navbar";
 
 const Home = () => {
   const [selectedTodo, setSelectedTodo] = useState();
@@ -20,14 +22,14 @@ const Home = () => {
 
   return (
     <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4 text-center">Todo List</h1>
+      <Navbar />
       <TodoForm todoDetail={selectedTodo} updateTodo={updateTodo} />
       <ul className="grid grid-cols-4 gap-8 mt-8">
         {todos?.results?.map((todo) => (
           <li
             key={todo.id}
             className={`p-2 border rounded-lg bg-yellow-200 ${
-              todo.done ? "bg-red-300" : "bg-yellow-300"
+              todo.done ? "bg-red-400" : "bg-yellow-300"
             }`}
           >
             <div className="flex justify-between items-center w-4/5 mx-auto border-b p-2 border-gray-700">

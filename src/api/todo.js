@@ -1,31 +1,39 @@
-import axios from "axios";
+import axiosClient from "../utils/axios";
 
-const BASE_URL = "http://127.0.0.1:8000/api/todos/";
-
-// Lấy danh sách Todos
+// Get all todos
 export const getTodos = async () => {
-  const response = await axios.get(BASE_URL);
+  const response = await axiosClient.get(
+    import.meta.env.VITE_BASE_URL + "todos/"
+  );
   return response.data;
 };
 
-// Thêm Todo
+// Add Todo
 export const addTodo = async (newTodo) => {
-  const response = await axios.post(BASE_URL, newTodo);
+  const response = await axiosClient.post(
+    import.meta.env.VITE_BASE_URL + "todos/",
+    newTodo
+  );
   return response.data;
 };
 
-// Cập nhật Todo
+// Update Todo
 export const updateTodo = async (todo) => {
-  const response = await axios.put(`${BASE_URL}${todo.id}/`, todo);
+  const response = await axiosClient.put(
+    `${import.meta.env.VITE_BASE_URL}todos/${todo.id}/`,
+    todo
+  );
   return response.data;
 };
 
-// Xóa Todo
+// Delete Todo
 export const deleteTodo = async (id) => {
-  await axios.delete(`${BASE_URL}${id}/`);
+  await axiosClient.delete(`${import.meta.env.VITE_BASE_URL}todos/${id}/`);
 };
 
 // Toggle status Todo
 export const toggleStatus = async (id) => {
-  await axios.patch(`${BASE_URL}${id}/toggle-status`);
+  await axiosClient.patch(
+    `${import.meta.env.VITE_BASE_URL}todos/${id}/toggle-status`
+  );
 };
