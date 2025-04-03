@@ -15,6 +15,7 @@ class TodoSerializer(serializers.ModelSerializer):
         return value
 
     def update(self, instance, validated_data):
+        # print(validated_data)
 
         if "done" in validated_data:
             if validated_data["done"] and instance.completed_at is None:
