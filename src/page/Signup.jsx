@@ -1,9 +1,7 @@
-import { useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../context/authContex";
 
 const Signup = () => {
   const navigate = useNavigate();

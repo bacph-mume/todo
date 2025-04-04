@@ -1,4 +1,5 @@
 import axios from "axios";
+import { redirect, useNavigate } from "react-router-dom";
 
 const axiosClient = axios.create({
   baseURL: import.meta.env.VITE_BASE_URL,
@@ -36,6 +37,10 @@ axiosClient.interceptors.response.use(
 export const refreshAccessToken = async () => {
   let refresh_token = localStorage.getItem("refresh_token");
 
+  if (!refresh_token) {
+    redirectToLogin();
+  }
+
   let response = await axios.post(
     import.meta.env.VITE_BASE_URL + "auth/token/refresh/",
     {
@@ -47,15 +52,29 @@ export const refreshAccessToken = async () => {
       },
     }
   );
-  let data = response.data;
 
-  localStorage.setItem("token", data.access);
+  try {
+    let data = response.data;
+    localStorage.setItem("token", data.access);
+    axiosClient.defaults.headers.common[
+      "Authorization"
+    ] = `Bearer ${data.access}`;
 
-  axiosClient.defaults.headers.common[
-    "Authorization"
-  ] = `Bearer ${data.access}`;
+    return data;
+  } catch (error) {
+    if (error.response.status === 401) {
+      redirectToLogin();
+    }
+    return Promise.reject(error);
+  }
+};
 
-  return data;
+const redirectToLogin = () => {
+  localStorage.removeItem("token");
+  localStorage.removeItem("refresh_token");
+  localStorage.removeItem("username");
+  redirect("/login");
+  return;
 };
 
 export default axiosClient;
